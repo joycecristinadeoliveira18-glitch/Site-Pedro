@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pedro Rodrigues — Psicólogo Humanista</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:    #f5f0e8;
+      --ivory:    #faf7f2;
+      --sage:     #8aab8e;
+      --sage-dk:  #5e836a;
+      --terra:    #b87c5a;
+      --terra-lt: #d4a07a;
+      --bark:     #3d2f26;
+      --mist:     #e6ede8;
+      --font-display: 'Cormorant Garamond', serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--ivory);
+      color: var(--bark);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.4rem 5vw;
+      background: rgba(250,247,242,.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(138,171,142,.18);
+      transition: box-shadow .3s;
+    }
+    nav.scrolled { box-shadow: 0 4px 32px rgba(61,47,38,.07); }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 300;
+      letter-spacing: .04em;
+      color: var(--bark);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--sage-dk); font-style: italic; }
+
+    .nav-links { display: flex; gap: 2.2rem; list-style: none; }
+    .nav-links a {
+      text-decoration: none; color: var(--bark); font-size: .85rem;
+      font-weight: 500; letter-spacing: .06em; text-transform: uppercase;
+      position: relative; transition: color .25s;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; left: 0; bottom: -3px;
+      width: 0; height: 1px; background: var(--terra);
+      transition: width .3s ease;
+    }
+    .nav-links a:hover { color: var(--terra); }
+    .nav-links a:hover::after { width: 100%; }
+
+    .nav-cta {
+      background: var(--sage-dk); color: #fff !important;
+      padding: .5rem 1.4rem; border-radius: 40px;
+      font-size: .82rem !important; letter-spacing: .08em;
+      transition: background .25s !important;
+    }
+    .nav-cta:hover { background: var(--terra) !important; color: #fff !important; }
+    .nav-cta::after { display: none !important; }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 0 5vw;
+      gap: 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg-circle {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      opacity: 0;
+      animation: fadeIn 1.4s forwards;
+    }
+    .hero-bg-circle.c1 {
+      width: 520px; height: 520px;
+      background: radial-gradient(circle, #c4d9c660 0%, transparent 70%);
+      top: -80px; right: -100px;
+      animation-delay: .2s;
+    }
+    .hero-bg-circle.c2 {
+      width: 380px; height: 380px;
+      background: radial-gradient(circle, #d4a07a30 0%, transparent 70%);
+      bottom: 60px; left: 30%;
+      animation-delay: .5s;
+    }
+
+    .hero-text { position: relative; z-index: 2; }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: .7rem;
+      font-size: .78rem; font-weight: 500; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--sage-dk);
+      margin-bottom: 1.6rem;
+      opacity: 0; animation: slideUp .8s .4s forwards;
+    }
+    .hero-eyebrow::before {
+      content: ''; display: block; width: 32px; height: 1px; background: var(--sage-dk);
+    }
+
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 5.5vw, 5rem);
+      font-weight: 300;
+      line-height: 1.12;
+      color: var(--bark);
+      opacity: 0; animation: slideUp .9s .55s forwards;
+    }
+    h1 em { color: var(--sage-dk); font-style: italic; font-weight: 300; }
+
+    .hero-sub {
+      margin-top: 1.6rem;
+      font-size: 1.05rem;
+      font-weight: 300;
+      color: #6b5c52;
+      max-width: 420px;
+      line-height: 1.8;
+      opacity: 0; animation: slideUp .9s .7s forwards;
+    }
+
+    .hero-actions {
+      margin-top: 2.6rem;
+      display: flex; gap: 1.2rem; flex-wrap: wrap;
+      opacity: 0; animation: slideUp .9s .85s forwards;
+    }
+
+    .btn-primary {
+      display: inline-block; padding: .9rem 2.2rem;
+      background: var(--sage-dk); color: #fff;
+      border-radius: 50px; text-decoration: none;
+      font-size: .9rem; font-weight: 500; letter-spacing: .04em;
+      transition: transform .2s, background .25s, box-shadow .25s;
+      box-shadow: 0 6px 24px rgba(94,131,106,.3);
+    }
+    .btn-primary:hover {
+      background: var(--terra); transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(184,124,90,.35);
+    }
+
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: .6rem;
+      padding: .9rem 0; color: var(--bark);
+      text-decoration: none; font-size: .9rem; font-weight: 400;
+      border-bottom: 1px solid rgba(61,47,38,.3);
+      transition: color .25s, border-color .25s;
+    }
+    .btn-ghost:hover { color: var(--terra); border-color: var(--terra); }
+    .btn-ghost .arrow { transition: transform .25s; }
+    .btn-ghost:hover .arrow { transform: translateX(4px); }
+
+    /* Hero image panel */
+    .hero-visual {
+      position: relative; z-index: 2;
+      display: flex; justify-content: center; align-items: center;
+      opacity: 0; animation: fadeIn 1.2s .6s forwards;
+    }
+    .hero-photo-wrap {
+      width: min(420px, 90%);
+      aspect-ratio: 3/4;
+      border-radius: 200px 200px 160px 160px;
+      overflow: hidden;
+      position: relative;
+      background: var(--mist);
+      box-shadow: 0 30px 80px rgba(61,47,38,.15);
+    }
+    .hero-photo-wrap img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    .hero-photo-placeholder {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 1rem; color: var(--sage-dk);
+    }
+    .hero-photo-placeholder svg { opacity: .4; }
+    .hero-photo-placeholder p { font-size: .8rem; opacity: .5; text-align: center; padding: 0 1rem; }
+
+    .hero-badge {
+      position: absolute; bottom: 2rem; left: -2rem;
+      background: #fff;
+      border-radius: 16px;
+      padding: 1rem 1.4rem;
+      box-shadow: 0 12px 40px rgba(61,47,38,.12);
+      display: flex; align-items: center; gap: .9rem;
+      animation: float 4s ease-in-out infinite;
+    }
+    .badge-icon {
+      width: 42px; height: 42px; border-radius: 50%;
+      background: var(--mist);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+    }
+    .badge-text strong { display: block; font-size: .92rem; color: var(--bark); }
+    .badge-text span { font-size: .75rem; color: #8a7a72; }
+
+    .hero-badge2 {
+      position: absolute; top: 2rem; right: -1.5rem;
+      background: var(--sage-dk);
+      border-radius: 14px;
+      padding: .9rem 1.2rem;
+      color: #fff;
+      animation: float 4s 1.5s ease-in-out infinite;
+    }
+    .hero-badge2 strong { display: block; font-size: 1.4rem; font-family: var(--font-display); }
+    .hero-badge2 span { font-size: .72rem; opacity: .8; }
+
+    /* ── SECTION COMMONS ── */
+    section { padding: 7rem 5vw; }
+
+    .section-label {
+      display: inline-flex; align-items: center; gap: .7rem;
+      font-size: .75rem; font-weight: 500; letter-spacing: .16em;
+      text-transform: uppercase; color: var(--terra);
+      margin-bottom: 1rem;
+    }
+    .section-label::before {
+      content: ''; width: 24px; height: 1px; background: var(--terra);
+    }
+
+    h2 {
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 4vw, 3.6rem);
+      font-weight: 300;
+      line-height: 1.15;
+      color: var(--bark);
+    }
+    h2 em { font-style: italic; color: var(--sage-dk); }
+
+    /* ── ABOUT ── */
+    #sobre {
+      background: var(--cream);
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 6rem;
+      align-items: center;
+    }
+
+    .about-image-wrap { position: relative; }
+    .about-img-bg {
+      width: 90%; aspect-ratio: 4/5;
+      border-radius: 120px 120px 80px 80px;
+      background: var(--mist);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(61,47,38,.1);
+    }
+    .about-img-bg img { width: 100%; height: 100%; object-fit: cover; }
+    .about-img-bg .placeholder-img {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: .5rem; color: var(--sage);
+    }
+    .about-img-deco {
+      position: absolute; bottom: -24px; right: -16px;
+      width: 180px; height: 180px;
+      border-radius: 50%;
+      border: 2px solid var(--terra-lt);
+      opacity: .4;
+    }
+    .about-img-deco2 {
+      position: absolute; top: 24px; left: -28px;
+      width: 96px; height: 96px;
+      border-radius: 50%;
+      background: var(--sage);
+      opacity: .15;
+    }
+
+    .about-content p {
+      font-size: 1.02rem; font-weight: 300;
+      color: #5c4d44; line-height: 1.9;
+      margin-bottom: 1.2rem;
+    }
+
+    .about-stats {
+      display: flex; gap: 2.5rem; margin: 2.4rem 0;
+      padding: 1.8rem 0;
+      border-top: 1px solid rgba(61,47,38,.1);
+      border-bottom: 1px solid rgba(61,47,38,.1);
+    }
+    .stat strong {
+      display: block;
+      font-family: var(--font-display); font-size: 2.8rem; font-weight: 300;
+      color: var(--sage-dk);
+    }
+    .stat span { font-size: .82rem; color: #8a7a72; }
+
+    .credentials { display: flex; flex-direction: column; gap: .7rem; margin-top: 1.6rem; }
+    .cred-item {
+      display: flex; align-items: flex-start; gap: .9rem;
+      font-size: .9rem; color: #5c4d44;
+    }
+    .cred-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--terra-lt); margin-top: .55rem; flex-shrink: 0;
+    }
+
+    /* ── SERVICES ── */
+    #servicos { text-align: center; }
+    #servicos h2 { margin-bottom: .6rem; }
+    .services-intro { font-size: 1rem; color: #6b5c52; max-width: 540px; margin: 0 auto 3.5rem; }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.6rem;
+    }
+
+    .service-card {
+      background: #fff;
+      border-radius: 24px;
+      padding: 2.4rem 2rem;
+      text-align: left;
+      transition: transform .3s, box-shadow .3s;
+      border: 1px solid rgba(138,171,142,.15);
+      position: relative;
+      overflow: hidden;
+    }
+    .service-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--sage), var(--terra-lt));
+      transform: scaleX(0); transform-origin: left;
+      transition: transform .35s ease;
+    }
+    .service-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(61,47,38,.1); }
+    .service-card:hover::before { transform: scaleX(1); }
+
+    .service-icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      background: var(--mist);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1.4rem;
+    }
+    .service-card h3 {
+      font-family: var(--font-display); font-size: 1.45rem; font-weight: 400;
+      color: var(--bark); margin-bottom: .7rem;
+    }
+    .service-card p { font-size: .9rem; color: #7a6b62; line-height: 1.75; }
+    .service-tag {
+      display: inline-block; margin-top: 1.2rem;
+      font-size: .72rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--sage-dk); background: var(--mist);
+      padding: .3rem .8rem; border-radius: 20px;
+    }
+
+    /* ── APPROACH ── */
+    #abordagem {
+      background: var(--bark);
+      color: #e8ddd5;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+      border-radius: 40px;
+      margin: 0 2vw;
+    }
+    #abordagem .section-label { color: var(--terra-lt); }
+    #abordagem .section-label::before { background: var(--terra-lt); }
+    #abordagem h2 { color: var(--cream); }
+    #abordagem h2 em { color: var(--terra-lt); }
+    #abordagem p { color: #c5b8af; font-size: 1rem; line-height: 1.9; font-weight: 300; }
+
+    .approach-steps { display: flex; flex-direction: column; gap: 1.6rem; margin-top: 2.5rem; }
+    .step { display: flex; gap: 1.2rem; align-items: flex-start; }
+    .step-num {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(138,171,142,.2);
+      border: 1px solid rgba(138,171,142,.4);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-size: 1rem; color: var(--sage);
+      flex-shrink: 0;
+    }
+    .step-content strong { display: block; color: var(--cream); font-weight: 500; margin-bottom: .2rem; }
+    .step-content span { font-size: .9rem; color: #9e9188; }
+
+    .approach-visual { display: flex; flex-direction: column; gap: 1rem; }
+    .approach-quote {
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 20px;
+      padding: 2rem 2.2rem;
+    }
+    .approach-quote blockquote {
+      font-family: var(--font-display); font-size: 1.6rem; font-weight: 300;
+      font-style: italic; line-height: 1.5; color: var(--cream);
+    }
+    .approach-quote cite {
+      display: block; margin-top: 1rem; font-style: normal;
+      font-size: .8rem; color: #8a7a72;
+    }
+    .approach-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .acard {
+      background: rgba(138,171,142,.1);
+      border: 1px solid rgba(138,171,142,.2);
+      border-radius: 16px;
+      padding: 1.4rem;
+    }
+    .acard-emoji { font-size: 1.6rem; margin-bottom: .6rem; }
+    .acard strong { display: block; color: var(--cream); font-size: .9rem; margin-bottom: .3rem; }
+    .acard span { font-size: .8rem; color: #9e9188; }
+
+    /* ── ONLINE ── */
+    #online {
+      text-align: center;
+      background: var(--cream);
+    }
+    .online-box {
+      max-width: 680px; margin: 0 auto;
+      background: #fff; border-radius: 28px;
+      padding: 3rem 3.5rem;
+      box-shadow: 0 8px 40px rgba(61,47,38,.07);
+      border: 1px solid rgba(138,171,142,.15);
+    }
+    .online-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .online-box h3 {
+      font-family: var(--font-display); font-size: 2rem; font-weight: 300;
+      color: var(--bark); margin-bottom: 1rem;
+    }
+    .online-box p { font-size: 1rem; color: #6b5c52; line-height: 1.85; font-weight: 300; }
+    .online-pills {
+      display: flex; flex-wrap: wrap; gap: .7rem; justify-content: center;
+      margin: 1.8rem 0;
+    }
+    .pill {
+      background: var(--mist); color: var(--sage-dk);
+      border-radius: 30px; padding: .45rem 1.1rem;
+      font-size: .82rem; font-weight: 500;
+    }
+
+    /* ── CONTACT ── */
+    #contato {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: start;
+    }
+    #contato p { font-size: 1rem; color: #6b5c52; line-height: 1.9; font-weight: 300; margin-top: 1rem; }
+
+    .contact-info { display: flex; flex-direction: column; gap: 1.2rem; margin-top: 2rem; }
+    .cinfo {
+      display: flex; gap: 1rem; align-items: center;
+      padding: 1.1rem 1.4rem;
+      background: var(--cream); border-radius: 14px;
+      text-decoration: none;
+      transition: box-shadow .25s;
+    }
+    .cinfo:hover { box-shadow: 0 4px 20px rgba(61,47,38,.1); }
+    .cinfo-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: var(--mist);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; flex-shrink: 0;
+    }
+    .cinfo-text strong { display: block; font-size: .85rem; color: var(--bark); }
+    .cinfo-text span { font-size: .8rem; color: #8a7a72; }
+
+    .contact-form { display: flex; flex-direction: column; gap: 1.1rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: .4rem; }
+    .form-group label { font-size: .8rem; font-weight: 500; letter-spacing: .05em; color: var(--bark); }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: .85rem 1.1rem;
+      background: var(--cream);
+      border: 1.5px solid rgba(61,47,38,.12);
+      border-radius: 12px;
+      font-family: var(--font-body); font-size: .92rem; color: var(--bark);
+      outline: none;
+      transition: border-color .25s, box-shadow .25s;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--sage-dk);
+      box-shadow: 0 0 0 3px rgba(94,131,106,.12);
+    }
+    .form-group textarea { resize: vertical; min-height: 110px; }
+    .form-submit {
+      display: inline-block; width: 100%; padding: 1rem;
+      background: var(--sage-dk); color: #fff;
+      border: none; border-radius: 14px; cursor: pointer;
+      font-family: var(--font-body); font-size: .95rem; font-weight: 500;
+      letter-spacing: .04em;
+      transition: background .25s, transform .2s;
+    }
+    .form-submit:hover { background: var(--terra); transform: translateY(-1px); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--bark); color: #c5b8af;
+      padding: 3rem 5vw;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1.5rem;
+    }
+    .footer-logo {
+      font-family: var(--font-display); font-size: 1.2rem;
+      color: var(--cream); font-weight: 300;
+    }
+    .footer-logo span { color: var(--terra-lt); font-style: italic; }
+    footer nav ul { display: flex; gap: 1.6rem; list-style: none; }
+    footer nav a { color: #9e9188; text-decoration: none; font-size: .82rem; transition: color .2s; }
+    footer nav a:hover { color: var(--cream); }
+    .footer-copy { font-size: .78rem; color: #6e6259; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .reveal {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      #hero { grid-template-columns: 1fr; padding-top: 7rem; text-align: center; }
+      .hero-text .hero-sub { max-width: 100%; }
+      .hero-actions { justify-content: center; }
+      .hero-visual { order: -1; }
+      .hero-badge { left: 0; }
+      #sobre, #abordagem, #contato { grid-template-columns: 1fr; gap: 3rem; }
+      #abordagem { margin: 0; border-radius: 0; }
+      .about-image-wrap { display: flex; justify-content: center; }
+      .services-grid { grid-template-columns: 1fr 1fr; }
+      .approach-cards { grid-template-columns: 1fr 1fr; }
+      .nav-links { display: none; }
+    }
+    @media (max-width: 580px) {
+      .services-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .about-stats { flex-direction: column; gap: 1rem; }
+      .online-box { padding: 2rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">Pedro <span>Rodrigues</span></a>
+  <ul class="nav-links">
+    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="#servicos">Serviços</a></li>
+    <li><a href="#abordagem">Abordagem</a></li>
+    <li><a href="#online">Online</a></li>
+    <li><a href="#contato" class="nav-cta">Agendar Sessão</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg-circle c1"></div>
+  <div class="hero-bg-circle c2"></div>
+
+  <div class="hero-text">
+    <p class="hero-eyebrow">Psicólogo Humanista · CRP 06/204795</p>
+    <h1>Psicoterapia<br>com olhar <em>humano</em></h1>
+    <p class="hero-sub">Um espaço seguro e livre de julgamentos para você se expressar, compreender suas angústias e construir novos sentidos para sua experiência de vida.</p>
+    <div class="hero-actions">
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSeJLLMXBIySOvrMeStYIzhKh-JSxlhQKm0A5oRfmYWRQ3f1Aw/viewform" target="_blank" class="btn-primary">Agendar Sessão</a>
+      <a href="#sobre" class="btn-ghost">Conheça meu trabalho <span class="arrow">→</span></a>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="hero-photo-wrap">
+      <div class="hero-photo-placeholder">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+          <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+        </svg>
+        <p>Insira sua foto aqui</p>
+      </div>
+    </div>
+    <div class="hero-badge">
+      <div class="badge-icon">💻</div>
+      <div class="badge-text">
+        <strong>Atendimento Online</strong>
+        <span>Brasil e exterior</span>
+      </div>
+    </div>
+    <div class="hero-badge2">
+      <strong>São Paulo</strong>
+      <span>e todo o Brasil</span>
+    </div>
+  </div>
+</section>
+
+<!-- SOBRE -->
+<section id="sobre">
+  <div class="about-image-wrap reveal">
+    <div class="about-img-bg">
+      <div class="placeholder-img">
+        <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+          <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+        </svg>
+      </div>
+    </div>
+    <div class="about-img-deco"></div>
+    <div class="about-img-deco2"></div>
+  </div>
+  <div class="about-content reveal">
+    <p class="section-label">Sobre mim</p>
+    <h2>Olá, sou <em>Pedro</em></h2>
+    <p>Sou psicólogo clínico em São Paulo, com foco no atendimento a adultos que buscam um processo de autoconhecimento e cuidado com a saúde mental. Meu trabalho é fundamentado na abordagem humanista, onde priorizo o acolhimento, a escuta atenta e o respeito absoluto à singularidade de cada pessoa.</p>
+    <p>Acredito que a psicoterapia deve ser um espaço seguro e livre de julgamentos — um ambiente preparado para você se expressar livremente e construir novos sentidos para sua experiência de vida.</p>
+    <div class="about-stats">
+      <div class="stat"><strong>100%</strong><span>online</span></div>
+      <div class="stat"><strong>🌍</strong><span>Brasil e exterior</span></div>
+      <div class="stat"><strong>2023</strong><span>formação USF</span></div>
+    </div>
+    <div class="credentials">
+      <div class="cred-item"><div class="cred-dot"></div>Bacharelado em Psicologia — Universidade São Francisco (2023)</div>
+      <div class="cred-item"><div class="cred-dot"></div>CRP 06/204795 — Conselho Regional de Psicologia de SP</div>
+      <div class="cred-item"><div class="cred-dot"></div>Abordagem Humanista — foco no acolhimento e escuta ativa</div>
+      <div class="cred-item"><div class="cred-dot"></div>Atendimento em conformidade com as normas do CFP</div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVIÇOS -->
+<section id="servicos">
+  <p class="section-label reveal" style="justify-content:center;">Serviços</p>
+  <h2 class="reveal">Como posso <em>ajudar</em></h2>
+  <p class="services-intro reveal">Atendo adultos que buscam autoconhecimento, equilíbrio emocional e crescimento pessoal — de onde você estiver.</p>
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <div class="service-icon">🧠</div>
+      <h3>Ansiedade</h3>
+      <p>Suporte terapêutico para compreender e manejar a ansiedade, desenvolvendo ferramentas práticas para o dia a dia.</p>
+      <span class="service-tag">Atendimento Online</span>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon">🌱</div>
+      <h3>Autoconhecimento</h3>
+      <p>Processo de descoberta de si mesmo, seus valores, padrões de comportamento e potenciais adormecidos.</p>
+      <span class="service-tag">Atendimento Online</span>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon">💼</div>
+      <h3>Transições de Carreira</h3>
+      <p>Apoio emocional e psicológico para adultos que vivenciam mudanças de carreira, demissões ou redirecionamentos profissionais.</p>
+      <span class="service-tag">Atendimento Online</span>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon">💑</div>
+      <h3>Relacionamentos</h3>
+      <p>Reflexões sobre vínculos afetivos, padrões relacionais e comunicação — para relações mais saudáveis e conscientes.</p>
+      <span class="service-tag">Atendimento Online</span>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon">✨</div>
+      <h3>Crescimento Pessoal</h3>
+      <p>Para quem não está em crise, mas deseja evoluir — desenvolver resiliência, clareza de propósito e bem-estar.</p>
+      <span class="service-tag">Atendimento Online</span>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon">🌍</div>
+      <h3>Brasileiros no Exterior</h3>
+      <p>Atendimento especial para brasileiros que vivem fora do país e enfrentam desafios de adaptação, saudade e identidade.</p>
+      <span class="service-tag">Online · Brasil e Exterior</span>
+    </div>
+  </div>
+</section>
+
+<!-- ABORDAGEM -->
+<section id="abordagem">
+  <div>
+    <p class="section-label">Abordagem</p>
+    <h2>Psicologia <em>Humanista</em></h2>
+    <p style="margin-top:1rem;">A abordagem humanista coloca você no centro do processo terapêutico. Acredito na sua capacidade de crescimento e na importância de um olhar genuíno, empático e não diretivo para facilitar essa jornada.</p>
+    <div class="approach-steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <strong>Escuta ativa e acolhimento</strong>
+          <span>Um espaço para você se expressar sem julgamentos ou pressões.</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <strong>Respeito à singularidade</strong>
+          <span>Cada pessoa é única — o processo terapêutico é moldado para você.</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <strong>Compreensão das angústias</strong>
+          <span>Exploramos juntos as raízes das suas dores e padrões de vida.</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <strong>Construção de novos sentidos</strong>
+          <span>Você se torna o protagonista da sua própria transformação.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="approach-visual reveal">
+    <div class="approach-quote">
+      <blockquote>"A psicoterapia deve ser um espaço seguro, livre de julgamentos, onde você encontra sentido para sua experiência de vida."</blockquote>
+      <cite>— Pedro Rodrigues, Psicólogo Humanista</cite>
+    </div>
+    <div class="approach-cards">
+      <div class="acard">
+        <div class="acard-emoji">🌿</div>
+        <strong>Acolhimento</strong>
+        <span>Escuta genuína e empática</span>
+      </div>
+      <div class="acard">
+        <div class="acard-emoji">👤</div>
+        <strong>Singularidade</strong>
+        <span>Respeito à sua história única</span>
+      </div>
+      <div class="acard">
+        <div class="acard-emoji">🔒</div>
+        <strong>Sigilo</strong>
+        <span>Total confidencialidade</span>
+      </div>
+      <div class="acard">
+        <div class="acard-emoji">💻</div>
+        <strong>Plataforma Segura</strong>
+        <span>Normas do CFP garantidas</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ONLINE -->
+<section id="online">
+  <p class="section-label reveal" style="justify-content:center;">Terapia Online</p>
+  <div class="online-box reveal">
+    <div class="online-icon">💻</div>
+    <h3>Atendimento de onde você estiver</h3>
+    <p>O atendimento online oferece praticidade e conforto, mantendo o mesmo cuidado, sigilo e qualidade do atendimento presencial. As sessões acontecem por plataformas seguras, em conformidade com as normas do Conselho Federal de Psicologia.</p>
+    <div class="online-pills">
+      <span class="pill">🇧🇷 Todo o Brasil</span>
+      <span class="pill">🌍 Brasileiros no exterior</span>
+      <span class="pill">🔒 Plataforma segura</span>
+      <span class="pill">📱 Sem deslocamento</span>
+      <span class="pill">🕐 Horários flexíveis</span>
+    </div>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSeJLLMXBIySOvrMeStYIzhKh-JSxlhQKm0A5oRfmYWRQ3f1Aw/viewform" target="_blank" class="btn-primary">Agendar Minha Sessão</a>
+  </div>
+</section>
+
+<!-- CONTATO -->
+<section id="contato">
+  <div class="reveal">
+    <p class="section-label">Contato</p>
+    <h2>Vamos dar o<br>primeiro <em>passo</em></h2>
+    <p>Entre em contato pelo WhatsApp ou e-mail para agendar sua sessão ou tirar dúvidas. Estou à disposição para caminharmos juntos.</p>
+    <div class="contact-info">
+      <a href="https://wa.me/5519989806088" target="_blank" class="cinfo">
+        <div class="cinfo-icon">📞</div>
+        <div class="cinfo-text">
+          <strong>WhatsApp</strong>
+          <span>(19) 98980-6088 — clique para chamar</span>
+        </div>
+      </a>
+      <a href="mailto:pedro.ros830@gmail.com" class="cinfo">
+        <div class="cinfo-icon">📧</div>
+        <div class="cinfo-text">
+          <strong>E-mail</strong>
+          <span>pedro.ros830@gmail.com</span>
+        </div>
+      </a>
+      <div class="cinfo">
+        <div class="cinfo-icon">📍</div>
+        <div class="cinfo-text">
+          <strong>Localização</strong>
+          <span>São Paulo · SP — Atendimento online para todo o Brasil e exterior</span>
+        </div>
+      </div>
+      <div class="cinfo">
+        <div class="cinfo-icon">📋</div>
+        <div class="cinfo-text">
+          <strong>Agendamento</strong>
+          <span>Pelo formulário online ou diretamente pelo WhatsApp</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <form class="contact-form reveal" onsubmit="handleSubmit(event)">
+    <div class="form-row">
+      <div class="form-group">
+        <label>Nome completo</label>
+        <input type="text" placeholder="Seu nome" required />
+      </div>
+      <div class="form-group">
+        <label>Telefone / WhatsApp</label>
+        <input type="tel" placeholder="(19) 00000-0000" required />
+      </div>
+    </div>
+    <div class="form-group">
+      <label>E-mail</label>
+      <input type="email" placeholder="seu@email.com" required />
+    </div>
+    <div class="form-group">
+      <label>Como prefere ser atendido?</label>
+      <select required>
+        <option value="" disabled selected>Selecione uma opção</option>
+        <option>Atendimento Online — Brasil</option>
+        <option>Atendimento Online — Exterior</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>O que te trouxe até aqui? (opcional)</label>
+      <textarea placeholder="Pode ser ansiedade, autoconhecimento, transição de carreira, relacionamentos..."></textarea>
+    </div>
+    <button type="submit" class="form-submit">Enviar Mensagem ✉️</button>
+  </form>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Pedro <span>Rodrigues</span> · Psicólogo Humanista</div>
+  <nav>
+    <ul>
+      <li><a href="#sobre">Sobre</a></li>
+      <li><a href="#servicos">Serviços</a></li>
+      <li><a href="#abordagem">Abordagem</a></li>
+      <li><a href="#online">Online</a></li>
+      <li><a href="#contato">Contato</a></li>
+    </ul>
+  </nav>
+  <p class="footer-copy">© 2026 Pedro Rodrigues · CRP 06/204795 · Todos os direitos reservados</p>
+</footer>
+
+<script>
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 30);
+  });
+
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('.form-submit');
+    btn.textContent = '✅ Mensagem enviada!';
+    btn.style.background = 'var(--sage-dk)';
+    setTimeout(() => {
+      btn.textContent = 'Enviar Mensagem ✉️';
+      e.target.reset();
+    }, 3000);
+  }
+</script>
+</body>
+</html>
